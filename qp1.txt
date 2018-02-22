@@ -1,0 +1,114 @@
+1. Write the querie’s for the following questions.
+-> Add 2 years to the Current Date.
+ 
+sel add_months(date,24);
+ 
+-> Retrive Month from the current date.
+ 
+sel extract(month from date);
+ 
+ 
+ 
+2. Write a query to display the data based on the the Conditional Statement.
+If Deptno=1 then Display ‘ADMIN’,
+If Deptno=2 then Display ‘IT’
+Else INVALID DEPT.
+ 
+select dept_no,case
+when dept_no=1 then 'ADMIN'
+when dept_no=2 then 'IT'
+else
+'INVALID'
+end as dept_name from emp_142841;
+ 
+ 
+ 
+3. Write a Parameterized macro to Retrive the all the employee and dept details based on deptno.
+ 
+create macro macro_142841(in_dept_no integer)
+as
+(select e.*,d.* from emp_142841 e,dept_142841 d 
+where e.dept_no=d.deptno and 
+e.dept_no=in_dept_no;);
+ 
+ 
+4.  Create two scripts.[30]
+1)  Delete the Data From emp table who is having experience more than 5 years.
+2)  After deleting export the data into emp.txt file.
+3)  Shouldn’t delete data directly in the database.
+4)  Use scripts for both deletion and Export.
+
+
+
+
+.LOGON 10.74.161.248/td_user21,td_user21
+ 
+delete from employee_stg_142976
+where (date - cast(joindate as date format 'yyyy-mm-dd')year(4) ) >5;
+.if ERRORCODE <> 0 THEN .EXIT ERRORCODE
+ 
+SELECT * FROM emp_stg_142841;
+ 
+.if ACTIVITYCOUNT <> O THEN .GOTO EXPORT
+ 
+ 
+.LABEL EXPORT
+ 
+.SET WIDTH 30000;
+.set format off
+.EXPORT report FILE =d:\deletedrecord.csv;
+.SET SEPARATOR ','
+SELECT * from emp_stg_142841;
+ 
+.LOGOFF;
+.EXIT;
+ 
+ 
+ANOTHER CONDITION : delete from emp_stg_142841 where (date-joined_date)/365>5;
+ 
+ 
+ 
+5.	Create a Script File to Load Data.[20]
+ 
+1)	Create a table in the database With name employee.
+2)	Columns as
+EMPID		INT,
+ENAME		varchar(10)
+SAL		INT
+3)	Use Input Data File(INPUT.txt) Provided to You.
+4)	Load the data in which at the Fifth Row Commit the data.
+
+
+
+
+create table table_name(EMPID INT,ENAME varchar(10),SAL INT);
+
+
+.LOGON 10.74.161.248/TD_USER21,TD_USER21;
+DATABASE TD_BIM_FR_TRNG_DB;
+BEGIN LOADING table_name
+ERRORFILES EMPLOYEE_ET161,EMPLOYEE_UV161
+CHECKPOINT 5;
+SET RECORD VARTEXT ",";
+DEFINE
+IN_EMPID (VARCHAR(10)),
+IN_ENAME (VARCHAR(10)),
+IN_SAL (VARCHAR(30))
+FILE=INPUT.TXT;
+
+INSERT INTO table_name VALUES(
+:IN_EMPID,
+:IN_ENAME,
+:IN_SAL);
+END LOADING;
+.LOGOFF;
+
+create table table_name(EmployeeNo INT,FirstName varchar(20),LastName varchar(20),
+JoinedDate varchar(20),DepartmentNo INT,BirthDate varchar(20));
+
+insert into table_name(101,Mike,Jmaes,3/27/2005,1,1/5/1980);
+insert into table_name(102,Robert,Williams,4/25/2007,2,3/5/1983);
+insert into table_name(103,Peter,Paul,3/21/2007,2,4/1/1983);
+insert into table_name(104,Alex,Stuart,2/1/2008,2,11/6/1984);
+insert into table_name(105,Robert,Jmaes,1/4/2008,3,12/1/1984);
+ 
